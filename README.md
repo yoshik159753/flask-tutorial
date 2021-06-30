@@ -7,10 +7,10 @@ Flask のチュートリアルです。
 
 ## 開発環境
 
-項目 | 値
----------|----------
-OS | Ubuntu 20.04.1 LTS
-開発言語 | python 3.8
+| 項目     | 値                 |
+| -------- | ------------------ |
+| OS       | Ubuntu 20.04.1 LTS |
+| 開発言語 | python 3.8         |
 
 ## クイックスタート
 
@@ -28,16 +28,19 @@ pipenv install --dev autopep8 flake8
 
 export FLASK_APP=flaskr
 export FLASK_ENV=development
+
+flask init-db
+
 flask run
 ```
 
 #### 使用しているライブラリ
 
-項目 | 値
----------|----------
-Flask | フレームワーク
-autopep8 | 自動整形ツール
-flake8 | ソースコードチェッカー
+| 項目     | 値                     |
+| -------- | ---------------------- |
+| Flask    | フレームワーク         |
+| autopep8 | 自動整形ツール         |
+| flake8   | ソースコードチェッカー |
 
 ## ディレクトリ構成
 

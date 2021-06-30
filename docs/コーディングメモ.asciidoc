@@ -59,3 +59,30 @@ app.config.from_pyfile():: 引数に指定した .py をロード
 
 また各メソッドには silent が設定可能。
 true にした場合はエラーを無視する(ファイルがない、など)。
+
+== g (global), current_app
+
+[horizontal]
+g:: 1リクエストにおけるグローバル変数。 dict 形式で管理する。
+current_app:: 初期化した app を取得できる。つまり app.config などにアクセスできる。
+
+[source,python]
+.使用例 https://flask.palletsprojects.com/en/2.0.x/tutorial/database/#connect-to-the-database[(Link)]
+----
+import sqlite3
+
+import click
+from flask import current_app, g
+from flask.cli import with_appcontext
+
+
+def get_db():
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
+
+    return g.db
+----
