@@ -1,0 +1,61 @@
+= コーディングメモ
+
+== app.py ではなく \\__init__.py で app を生成
+
+次の二つを目的に \\__init__.py に記載している。
+
+* アプリケーションのファクトリ(これは app.py でも良さそう)
+* flaskr ディレクトリをパッケージとして扱うように指示
+
+最終的にパッケージとして固めるために \\__init__.py に書いている模様。
+
+== instance_relative_config(インスタンスフォルダ)
+
+[source,python]
+----
+app = Flask(__name__, instance_relative_config=True)
+----
+
+[quote, DeepL 翻訳より]
+____
+instance_relative_config=True は、コンフィギュレーションファイルがインスタンスフォルダからの相対的なものであることをアプリに伝えます。
+インスタンスフォルダは、 flaskr パッケージの外側にあり、コンフィギュレーションシークレットやデータベースファイルなど、バージョンコントロールにコミットすべきでないローカルデータを保持することができます。
+____
+
+インスタンスフォルダのデフォルトロケーションは次の通り。
+https://flask.palletsprojects.com/en/2.0.x/config/#instance-folders[(Link)]
+
+Uninstalled module::
++
+--
+....
+/myapp.py
+/instance
+....
+--
++
+Uninstalled package::
++
+--
+....
+/myapp
+    /__init__.py
+/instance
+....
+--
+
+== app.config を設定する方法
+
+いくつかある。
+https://flask.palletsprojects.com/en/2.0.x/api/#configuration[(Link)]
+
+[horizontal]
+app.config.xxx = yyy:: 直接設定
+app.config.from_envvar():: 引数に指定した .env をロード
+app.config.from_file():: 引数に指定したファイルを、ロードする形式を指定してロード。 toml とか json とか指定できそう？
+app.config.from_json():: 引数に指定した json ファイルをロード
+app.config.from_mapping():: キーワード引数で任意の値を設定。また複数指定可能
+app.config.from_pyfile():: 引数に指定した .py をロード
+
+また各メソッドには silent が設定可能。
+true にした場合はエラーを無視する(ファイルがない、など)。
