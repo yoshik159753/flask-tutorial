@@ -63,7 +63,7 @@ true にした場合はエラーを無視する(ファイルがない、など)�
 == g (global), current_app
 
 [horizontal]
-g:: 1リクエストにおけるグローバル変数。 dict 形式で管理する。
+g:: 1リクエストにおけるグローバル変数。 Object 型。
 current_app:: 初期化した app を取得できる。つまり app.config などにアクセスできる。
 
 [source,python]
@@ -86,3 +86,57 @@ def get_db():
 
     return g.db
 ----
+
+== werkzeug.security が提供する generate_password_hash
+
+[source,python]
+----
+from werkzeug.security import check_password_hash, generate_password_hash
+----
+
+werkzeug.security が提供する generate_password_hash は pbkdf2:sha256 によるハッシュ化。
+単純にハッシュ化するわけではなく、ストレッチングによる難読化を施している。
+
+wikipedia の記事より https://ja.wikipedia.org/wiki/PBKDF2[(Link)] 、 bcrypt と比較すると次のとおり。
+
+[horizontal]
+pbkdf2:sha256:: 処理は軽いがセキュリティは弱い
+bcrypt:: 処理は重いがセキュリティは強い
+
+なお、ここでいう「処理」とは「メモリ消費量」的な観点。
+トレードオフなので積んでるメモリに応じて使い分けるとよさそう。
+
+generate_password_hash で生成したハッシュは、 check_password_hash で検証可能。
+
+== session への保存
+
+[source,python]
+----
+from flask import session　# <1>
+
+session.clear() # <2>
+session['user_id'] = user['id'] # <3>
+----
+<1> session のインポート。 g とか current_app とかと同様に global な扱いの模様
+<2> session の中身をクリア
+<3> dict 形式でデータを格納
+
+== ログインユーザーをグローバルに参照するテクニック
+
+[source,python]
+----
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
+----
+
+つまり。
+リクエストのメイン処理前に前処理をフックして(before_app_request)、グローバル変数 g に格納する。
+参照するときは g から user を参照することで、どこからでもグローバルに参照できる。
