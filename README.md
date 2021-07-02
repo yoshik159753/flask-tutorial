@@ -24,23 +24,35 @@ Flask のチュートリアルです。
 ```bash
 pipenv --python 3.8
 pipenv install Flask
-pipenv install --dev autopep8 flake8
+pipenv install --dev autopep8 flake8 pytest coverage
 
 export FLASK_APP=flaskr
 export FLASK_ENV=development
 
+# データ初期化
 flask init-db
 
+# (開発用) APP サーバー起動
 flask run
+
+# テスト実行
+pytest
+
+# カバレッジを取得しながらテスト実行
+coverage run -m pytest
+# 取得したカバレッジを html に出力
+coverage html
 ```
 
 #### 使用しているライブラリ
 
-| 項目     | 値                     |
-| -------- | ---------------------- |
-| Flask    | フレームワーク         |
-| autopep8 | 自動整形ツール         |
-| flake8   | ソースコードチェッカー |
+| 項目     | 値                                     |
+| -------- | -------------------------------------- |
+| Flask    | フレームワーク                         |
+| autopep8 | 自動整形ツール                         |
+| flake8   | ソースコードチェッカー                 |
+| pytest   | ユニットテスト用ライブラリ             |
+| coverage | ユニットテストのカバレッジ用ライブラリ |
 
 ## ディレクトリ構成
 

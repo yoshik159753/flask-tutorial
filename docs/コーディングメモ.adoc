@@ -140,3 +140,82 @@ def load_logged_in_user():
 つまり。
 リクエストのメイン処理前に前処理をフックして(before_app_request)、グローバル変数 g に格納する。
 参照するときは g から user を参照することで、どこからでもグローバルに参照できる。
+
+== 仮想環境へ開発用にプロジェクトをインストール
+
+[quote, DeepL 翻訳より]
+____
+これは、pipにカレントディレクトリのsetup.pyを見つけさせ、編集可能モードまたは開発モードでインストールするように指示します。
+編集可能モードとは、ローカルコードに変更を加えても、依存関係などのプロジェクトに関するメタデータを変更した場合にのみ、再インストールする必要があるということです。
+
+プロジェクトがpip listでインストールされたことが確認できます。
+
+これまでプロジェクトを実行してきた方法と何も変わりません。
+FLASK_APPはflaskrに設定され、flask runはアプリケーションを実行しますが、flask-tutorialディレクトリだけでなく、どこからでも呼び出せるようになります。
+____
+
+[source,bash]
+----
+pip install -e .
+# or
+pipenv install -e .
+----
+
+「どこからでも呼び出せる」だけなら、仮想環境にインストールする必要なくない？という気もしたが。
+なぜこれが必要かというと、 pytest を実行するにあたり root を特定するために必要。
+なので、仮想環境にプロジェクトをインストールしないと pytest がプロジェクト(この場合は flaskr)の path を認識できない。
+
+下記に「pytest が動かない」という issues があがっているが、上記が要因とのレスあり。
+https://github.com/pallets/flask/issues/2908[Tutorial: Pytest don't find flaskr package #2908]
+
+
+== app のコンテキスト
+
+[source,python]
+----
+def test_get_close_db(app):
+    with app.app_context():   # <1>
+        db = get_db()
+        assert db is get_db()
+
+    with pytest.raises(sqlite3.ProgrammingError) as e:
+        db.execute('SELECT 1')   # <2>
+
+    assert 'closed' in str(e.value)
+----
+<1> with 句を用いることで conftest で生成している app のコンテキスト内で処理することを宣言
+<2> with 句の外なので app のコンテキストは存在しない
+
+== テストでセッションにアクセスする (pytest)
+
+[quote, DeepL 翻訳より]
+____
+withブロックの中でclientを使うと、レスポンスが返ってきた後にsessionなどのコンテキスト変数にアクセスすることができます。
+通常、リクエスト外でセッションにアクセスするとエラーになります。
+____
+
+[source,python]
+----
+def test_login(client, auth):
+    assert client.get('/auth/login').status_code == 200
+    response = auth.login()
+    assert response.headers['Location'] == 'http://localhost/'
+
+    with client:
+        client.get('/')
+        assert session['user_id'] == 1
+        assert g.user['username'] == 'test'
+----
+
+== レスポンスの html の検証 (pytest)
+
+`response.data` に html が含まれているため in 句を用いて検証できる。
+なお `response.data` はバイナリで返る模様。
+
+[source,python]
+----
+def test_index(client, auth):
+    response = client.get('/')
+    assert b"Log In" in response.data
+    assert b"Register" in response.data
+----
