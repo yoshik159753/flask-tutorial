@@ -8,6 +8,7 @@ autopep8 = "*"
 flake8 = "*"
 pytest = "*"
 coverage = "*"
+wheel = "*"
 
 [packages]
 flask = "*"
