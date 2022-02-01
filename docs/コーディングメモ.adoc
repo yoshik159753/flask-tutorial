@@ -43,6 +43,15 @@ Uninstalled package::
 /instance
 ....
 --
++
+Installed module or package::
++
+--
+....
+$PREFIX/lib/pythonX.Y/site-packages/myapp
+$PREFIX/var/myapp-instance
+....
+--
 
 == app.config を設定する方法
 
@@ -219,3 +228,16 @@ def test_index(client, auth):
     assert b"Log In" in response.data
     assert b"Register" in response.data
 ----
+
+== ライブラリ(パッケージ、ディストリビューション)の生成
+
+wheel ライブラリを使ってライブラリを生成する。
+setup.py の内容を元に生成する模様。
+
+[source,bashs]
+----
+python setup.py bdist_wheel
+----
+
+dist ディレクトリに whl ファイルが生成される。
+そのファイルを本番サーバーにインストールしたり、もしくはリポジトリにアップし、そこからダウンロード＆インストールしてサーバーを起動する運用となる。

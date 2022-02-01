@@ -23,8 +23,8 @@ Flask のチュートリアルです。
 
 ```bash
 pipenv --python 3.8
-pipenv install Flask
-pipenv install --dev autopep8 flake8 pytest coverage
+pipenv install
+pipenv install --dev
 
 export FLASK_APP=flaskr
 export FLASK_ENV=development
@@ -53,6 +53,7 @@ coverage html
 | flake8   | ソースコードチェッカー                 |
 | pytest   | ユニットテスト用ライブラリ             |
 | coverage | ユニットテストのカバレッジ用ライブラリ |
+| wheel    | Python パッケージ操作ライブラリ        |
 
 ## ディレクトリ構成
 
