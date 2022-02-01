@@ -43,6 +43,15 @@ Uninstalled package::
 /instance
 ....
 --
++
+Installed module or package::
++
+--
+....
+$PREFIX/lib/pythonX.Y/site-packages/myapp
+$PREFIX/var/myapp-instance
+....
+--
 
 == app.config を設定する方法
 
