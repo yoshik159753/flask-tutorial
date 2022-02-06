@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "flaskr"
+version = "0.1.0"
+description = ""
+authors = ["Yoshi K <kai.outsider.777+git@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10.2"
+Flask = "^2.0.2"
+psycopg2-binary = "^2.9.3"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.6.0"
+flake8 = "^4.0.1"
+pytest = "^7.0.0"
+coverage = "^6.3.1"
+wheel = "^0.37.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

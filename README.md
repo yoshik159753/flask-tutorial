@@ -10,21 +10,34 @@ Flask のチュートリアルです。
 | 項目     | 値                 |
 | -------- | ------------------ |
 | OS       | Ubuntu 20.04.1 LTS |
-| 開発言語 | python 3.8         |
+| 開発言語 | python 3.10.2      |
+
+heroku の都合により python のバージョンは 3.10.2 以上としています。
 
 ## クイックスタート
 
 ### 使用するツール
 
-- pyenv (python のバージョンが 3.8 であれば不要です)
-- pipenv
+- pyenv (python のバージョンが 3.10.2 以上であれば不要です)
+- poetry
 
 ### usage
 
 ```bash
-pipenv --python 3.8
-pipenv install
-pipenv install --dev
+# 3.10.2 があることを確認
+pyenv install --list
+# 3.10.2 をインストール(リストになければ https://github.com/pyenv/pyenv-update を参考に pyenv をアップデート)
+pyenv install 3.10.2
+
+# 仮想環境の構築(ローカルの python が 3.10.2 以上の場合)
+poetry env use system
+# 仮想環境の構築(pyenv を使っている場合)
+poetry env use /home/username/.pyenv/versions/3.10.2/bin/python
+# 依存パッケージをインストール
+poetry install
+
+# 仮想環境の activate
+poetry shell
 
 export FLASK_APP=flaskr
 export FLASK_ENV=development
