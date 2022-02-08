@@ -8,6 +8,7 @@ authors = ["Yoshi K <kai.outsider.777+git@gmail.com>"]
 python = "^3.10.2"
 Flask = "^2.0.2"
 psycopg2-binary = "^2.9.3"
+gunicorn = "^20.1.0"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"
