@@ -59,7 +59,7 @@ $PREFIX/var/myapp-instance
 https://flask.palletsprojects.com/en/2.0.x/api/#configuration[(Link)]
 
 [horizontal]
-app.config.xxx = yyy:: 直接設定
+app.config['xxx'] = yyy:: 直接設定
 app.config.from_envvar():: 引数に指定した .env をロード
 app.config.from_file():: 引数に指定したファイルを、ロードする形式を指定してロード。 toml とか json とか指定できそう？
 app.config.from_json():: 引数に指定した json ファイルをロード
