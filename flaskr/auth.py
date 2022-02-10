@@ -56,12 +56,13 @@ def login():
                 'SELECT * FROM users WHERE username = %s', (username,)
             )
             user = cursor.fetchone()
-            user_id, user_username, user_password = user
 
             if user is None:
                 error = 'Incorrect username.'
-            elif not check_password_hash(user_password, password):
-                error = 'Incorrect password.'
+            else:
+                user_id, user_username, user_password = user
+                if not check_password_hash(user_password, password):
+                    error = 'Incorrect password.'
 
             if error is None:
                 session.clear()
