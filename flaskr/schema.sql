@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS posts;
 
 DROP TABLE IF EXISTS users;
 
+DROP TABLE IF EXISTS healthcheck;
+
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   username TEXT UNIQUE NOT NULL,
@@ -16,3 +18,5 @@ CREATE TABLE posts (
   body TEXT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES users (id)
 );
+
+CREATE TABLE healthcheck (id SERIAL PRIMARY KEY, datetime TIMESTAMP);

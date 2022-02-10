@@ -4,6 +4,7 @@ import tempfile
 import pytest
 from flaskr import create_app
 from flaskr.db import get_db, init_db
+from freezegun import freeze_time
 
 with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
     _data_sql = f.read().decode('utf8')
@@ -59,3 +60,10 @@ class AuthActions(object):
 @pytest.fixture
 def auth(client):
     return AuthActions(client)
+
+
+@pytest.fixture()
+def frozen_datetime():
+    test_datetime_str = "2020-01-23T12:34:56.123456+00:00"
+    with freeze_time(test_datetime_str) as frozen_datetime_:
+        yield frozen_datetime_
