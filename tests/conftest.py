@@ -20,9 +20,13 @@ def app():
 
     with app.app_context():
         init_db()
-        get_db().executescript(_data_sql)
 
-    yield app
+        db = get_db()
+        with db.cursor() as cursor:
+            cursor.execute(_data_sql)
+        db.commit()
+
+        yield app
 
     os.close(db_fd)
     os.unlink(db_path)

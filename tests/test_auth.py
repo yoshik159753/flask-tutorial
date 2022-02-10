@@ -11,9 +11,11 @@ def test_register(client, app):
     assert 'http://localhost/auth/login' == response.headers['Location']
 
     with app.app_context():
-        assert get_db().execute(
-            "select * from user where username = 'a'",
-        ).fetchone() is not None
+        with get_db().cursor() as cursor:
+            cursor.execute(
+                "select * from users where username = 'a'",
+            )
+            assert cursor.fetchone() is not None
 
 
 @pytest.mark.parametrize(('username', 'password', 'message'), (
