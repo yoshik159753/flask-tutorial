@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 
 
 def create_app(test_config=None):
@@ -24,6 +25,19 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    cors_origins = os.getenv('CORS_ORIGINS')
+    cors_origins = cors_origins.split(',') if cors_origins is not None else None
+    cors_methods = os.getenv('CORS_METHODS')
+    cors_methods = cors_methods.split(',') if cors_methods is not None else None
+    cors_allow_headers = os.getenv('CORS_ALLOW_HEADERS')
+    cors_allow_headers = cors_allow_headers.split(',') if cors_allow_headers is not None else None
+    app.config.from_mapping(
+        CORS_ORIGINS=cors_origins,
+        CORS_METHODS=cors_methods,
+        CORS_ALLOW_HEADERS=cors_allow_headers
+    )
+    CORS(app)
 
     from . import db
     db.init_app(app)
