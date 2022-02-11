@@ -6,3 +6,7 @@ export TESTING=False
 export SECRET_KEY=
 
 export DATABASE_URL=postgres://username:password@host:port/dbname
+
+export CORS_ORIGINS=http://localhost:3000,http://192.168.1.1:3000
+export CORS_METHODS=GET,POST
+export CORS_ALLOW_HEADERS=Content-type
