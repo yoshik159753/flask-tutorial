@@ -1,5 +1,6 @@
 import psycopg2
 import pytest
+
 from flaskr.db import get_db
 
 

@@ -1,5 +1,5 @@
-from flaskr.api.v1.endpoints.healthcheck import HealthCheckApi
 from flaskr.api.v1.endpoints.blogs import Blogs
+from flaskr.api.v1.endpoints.healthcheck import HealthCheckApi
 
 
 def initialize_routes(api):
