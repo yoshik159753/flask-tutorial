@@ -63,6 +63,25 @@ def auth(client):
     return AuthActions(client)
 
 
+class AuthApiActions(object):
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, username='test', password='test', api_version='v1'):
+        return self._client.post(
+            f"api/{api_version}/session",
+            data={'username': username, 'password': password}
+        )
+
+    def logout(self, api_version='v1'):
+        return self._client.delete(f"api/{api_version}/session",)
+
+
+@pytest.fixture
+def authApi(client):
+    return AuthApiActions(client)
+
+
 @pytest.fixture()
 def frozen_datetime():
     test_datetime_str = "2020-01-23T12:34:56.123456+00:00"
