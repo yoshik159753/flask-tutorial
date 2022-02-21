@@ -68,3 +68,9 @@ class Session(Resource):
         # TODO: for production
         # response.set_cookie(key="token", value="token", httponly=True, secure=True)
         return response
+
+    def delete(self):
+        response = Response(mimetype="application/json",
+                            status=200)
+        response.delete_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'))
+        return response
