@@ -29,8 +29,9 @@ def test_ログインできること(authApi, api_version):
     assert cookies_str is not None
     cookie = cookies.SimpleCookie()
     cookie.load(cookies_str)
-    assert cookie["session-token"]["httponly"] is True
-    payload = jwt.decode(cookie["session-token"].value,
+    session_cookie_name = os.getenv('SESSION_COOKIE_NAME')
+    assert cookie[session_cookie_name]["httponly"] is True
+    payload = jwt.decode(cookie[session_cookie_name].value,
                          key=os.getenv('SECRET_KEY'),
                          algorithms=['HS256'])
     assert payload is not None

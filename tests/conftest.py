@@ -70,7 +70,7 @@ class AuthApiActions(object):
     def login(self, username='test', password='test', api_version='v1'):
         return self._client.post(
             f"api/{api_version}/session",
-            data={'username': username, 'password': password}
+            json={'username': username, 'password': password}
         )
 
     def logout(self, api_version='v1'):
