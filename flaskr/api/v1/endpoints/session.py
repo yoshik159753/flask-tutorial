@@ -21,8 +21,11 @@ def default_handler(obj):
 class Session(Resource):
 
     def post(self):
-        username = request.form['username']
-        password = request.form['password']
+        req = request.get_json()
+        username = req.get('username')
+        password = req.get('password')
+
+        # TODO: バリデーションチェック
 
         error_code = None
 
@@ -59,7 +62,15 @@ class Session(Resource):
 
         response = Response(mimetype="application/json",
                             status=200)
-        response.set_cookie(key="session-token", value=token, httponly=True)
+        response.set_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'),
+                            value=token,
+                            httponly=current_app.config.get('SESSION_COOKIE_HTTPONLY'))
         # TODO: for production
         # response.set_cookie(key="token", value="token", httponly=True, secure=True)
+        return response
+
+    def delete(self):
+        response = Response(mimetype="application/json",
+                            status=200)
+        response.delete_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'))
         return response
