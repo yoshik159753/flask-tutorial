@@ -76,6 +76,10 @@ class AuthApiActions(object):
     def logout(self, api_version='v1'):
         return self._client.delete(f"api/{api_version}/session",)
 
+    def is_logged_in(self, api_version='v1'):
+        return self._client.get(
+            f"api/{api_version}/session")
+
 
 @pytest.fixture
 def authApi(client):
