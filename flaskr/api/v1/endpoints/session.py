@@ -74,3 +74,23 @@ class Session(Resource):
                             status=200)
         response.delete_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'))
         return response
+
+    def get(self):
+        try:
+            session_jwt = request.cookies.get(current_app.config.get('SESSION_COOKIE_NAME'))
+            jwt.decode(session_jwt,
+                       key=current_app.config.get('SECRET_KEY'),
+                       algorithms=['HS256'])
+
+        except jwt.exceptions.ExpiredSignatureError:
+            ret = {'error_code': 1}
+            return Response(json.dumps(ret),
+                            mimetype="application/json",
+                            status=HTTPStatus.UNAUTHORIZED)
+
+        except jwt.exceptions.InvalidTokenError:
+            return Response(mimetype="application/json",
+                            status=HTTPStatus.UNAUTHORIZED)
+
+        return Response(mimetype="application/json",
+                        status=HTTPStatus.OK)
