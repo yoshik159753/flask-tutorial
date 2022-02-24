@@ -32,10 +32,13 @@ def create_app(test_config=None):
     cors_methods = cors_methods.split(',') if cors_methods is not None else None
     cors_allow_headers = os.getenv('CORS_ALLOW_HEADERS')
     cors_allow_headers = cors_allow_headers.split(',') if cors_allow_headers is not None else None
+    cors_supports_credentials = os.getenv('CORS_SUPPORTS_CREDENTIALS')
+    cors_supports_credentials = cors_supports_credentials if cors_supports_credentials is not None else False
     app.config.from_mapping(
         CORS_ORIGINS=cors_origins,
         CORS_METHODS=cors_methods,
-        CORS_ALLOW_HEADERS=cors_allow_headers
+        CORS_ALLOW_HEADERS=cors_allow_headers,
+        CORS_SUPPORTS_CREDENTIALS=cors_supports_credentials,
     )
     CORS(app)
 

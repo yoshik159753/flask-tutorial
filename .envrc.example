@@ -14,5 +14,6 @@ export DATABASE_URL=postgres://username:password@host:port/dbname
 export TEST_DATABASE_URL=postgres://username:password@host:port/dbname
 
 export CORS_ORIGINS=http://localhost:3000,http://192.168.1.1:3000
-export CORS_METHODS=GET,POST
+export CORS_METHODS=GET,POST,DELETE,PATCH,PUT
 export CORS_ALLOW_HEADERS=Content-type
+export CORS_SUPPORTS_CREDENTIALS=False
