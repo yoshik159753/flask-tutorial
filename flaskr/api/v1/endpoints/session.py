@@ -64,7 +64,9 @@ class Session(Resource):
                             status=200)
         response.set_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'),
                             value=token,
-                            httponly=current_app.config.get('SESSION_COOKIE_HTTPONLY'))
+                            httponly=current_app.config.get('SESSION_COOKIE_HTTPONLY'),
+                            secure=current_app.config.get('SESSION_COOKIE_SECURE'),
+                            samesite=current_app.config.get('SESSION_COOKIE_SAMESITE'))
         # TODO: for production
         # response.set_cookie(key="token", value="token", httponly=True, secure=True)
         return response

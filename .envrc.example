@@ -7,6 +7,8 @@ export SECRET_KEY=
 
 export SESSION_COOKIE_NAME=session
 export SESSION_COOKIE_HTTPONLY=True
+export SESSION_COOKIE_SECURE=False
+export SESSION_COOKIE_SAMESITE=None
 
 export DATABASE_URL=postgres://username:password@host:port/dbname
 export TEST_DATABASE_URL=postgres://username:password@host:port/dbname
