@@ -5,6 +5,12 @@ from flask_cors import CORS
 from flask_restful import Api
 
 
+def set_env_value_to_app(app, key):
+    env_value = os.getenv(key)
+    if env_value is not None:
+        app.config[key] = env_value
+
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -12,6 +18,11 @@ def create_app(test_config=None):
         SECRET_KEY=os.getenv('SECRET_KEY'),
         DATABASE_URL=os.getenv('DATABASE_URL'),
     )
+
+    set_env_value_to_app(app, 'SESSION_COOKIE_NAME')
+    set_env_value_to_app(app, 'SESSION_COOKIE_HTTPONLY')
+    set_env_value_to_app(app, 'SESSION_COOKIE_SECURE')
+    set_env_value_to_app(app, 'SESSION_COOKIE_SAMESITE')
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
