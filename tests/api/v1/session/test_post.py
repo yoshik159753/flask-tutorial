@@ -35,3 +35,7 @@ def test_ログインできること(authApi, api_version):
                          key=os.getenv('SECRET_KEY'),
                          algorithms=['HS256'])
     assert payload is not None
+
+    res = response.get_json()
+    assert res['user_id'] == 1
+    assert res['username'] == 'test'

@@ -60,11 +60,18 @@ class Session(Resource):
             algorithm='HS256'
         )
 
-        response = Response(mimetype="application/json",
-                            status=200)
+        ret = {
+            'user_id': user_id,
+            'username': user_username,
+        }
+        response = Response(json.dumps(ret),
+                            mimetype="application/json",
+                            status=HTTPStatus.OK)
         response.set_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'),
                             value=token,
-                            httponly=current_app.config.get('SESSION_COOKIE_HTTPONLY'))
+                            httponly=current_app.config.get('SESSION_COOKIE_HTTPONLY'),
+                            secure=current_app.config.get('SESSION_COOKIE_SECURE'),
+                            samesite=current_app.config.get('SESSION_COOKIE_SAMESITE'))
         # TODO: for production
         # response.set_cookie(key="token", value="token", httponly=True, secure=True)
         return response
