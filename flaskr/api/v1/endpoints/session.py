@@ -79,7 +79,10 @@ class Session(Resource):
     def delete(self):
         response = Response(mimetype="application/json",
                             status=200)
-        response.delete_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'))
+        response.delete_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'),
+                               httponly=current_app.config.get('SESSION_COOKIE_HTTPONLY'),
+                               secure=current_app.config.get('SESSION_COOKIE_SECURE'),
+                               samesite=current_app.config.get('SESSION_COOKIE_SAMESITE'))
         return response
 
     def get(self):
