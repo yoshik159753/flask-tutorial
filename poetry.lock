@@ -117,6 +117,22 @@ Flask = ">=0.9"
 Six = "*"
 
 [[package]]
+name = "flask-jwt-extended"
+version = "4.3.1"
+description = "Extended JWT integration with Flask"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4"
+
+[package.dependencies]
+Flask = ">=1.0,<3.0"
+PyJWT = ">=2.0,<3.0"
+Werkzeug = ">=0.14"
+
+[package.extras]
+asymmetric_crypto = ["cryptography (>=35.0.0)"]
+
+[[package]]
 name = "flask-restful"
 version = "0.3.9"
 description = "Simple framework for creating REST APIs"
@@ -376,7 +392,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10.2"
-content-hash = "3645b25b6e5a0213583118d6721229d01a4a3a2c673ddcb4a4a94226f9efa974"
+content-hash = "5c2aeb54a95b779cf93931c190db9833b0ea4914cff761b78f14785d5acf6de5"
 
 [metadata.files]
 aniso8601 = [
@@ -457,6 +473,10 @@ flask = [
 flask-cors = [
     {file = "Flask-Cors-3.0.10.tar.gz", hash = "sha256:b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de"},
     {file = "Flask_Cors-3.0.10-py2.py3-none-any.whl", hash = "sha256:74efc975af1194fc7891ff5cd85b0f7478be4f7f59fe158102e91abb72bb4438"},
+]
+flask-jwt-extended = [
+    {file = "Flask-JWT-Extended-4.3.1.tar.gz", hash = "sha256:ad6977b07c54e51c13b5981afc246868b9901a46715d9b9827898bfd916aae88"},
+    {file = "Flask_JWT_Extended-4.3.1-py2.py3-none-any.whl", hash = "sha256:c82c9e505bc96f4a5186de31c05262dbcde6fa10581e9aa46df8f99ca04be2c3"},
 ]
 flask-restful = [
     {file = "Flask-RESTful-0.3.9.tar.gz", hash = "sha256:ccec650b835d48192138c85329ae03735e6ced58e9b2d9c2146d6c84c06fa53e"},
