@@ -2,12 +2,13 @@ import datetime
 import json
 from http import HTTPStatus
 
-import jwt
-from flask import Response, current_app, request
+from flask import Response, request
+from flask_jwt_extended import (create_access_token, get_jwt_identity,
+                                jwt_required, set_access_cookies,
+                                unset_jwt_cookies)
 from flask_restful import Resource
-from werkzeug.security import check_password_hash
-
 from flaskr.db import get_db
+from werkzeug.security import check_password_hash
 
 
 def default_handler(obj):
@@ -49,17 +50,6 @@ class Session(Resource):
                             mimetype="application/json",
                             status=HTTPStatus.BAD_REQUEST)
 
-        # cookie にセットするセッション管理用の jwt を生成
-        payload = {
-            'sub': user_id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7),
-        }
-        token = jwt.encode(
-            payload=payload,
-            key=current_app.config.get('SECRET_KEY'),
-            algorithm='HS256'
-        )
-
         ret = {
             'user_id': user_id,
             'username': user_username,
@@ -67,40 +57,22 @@ class Session(Resource):
         response = Response(json.dumps(ret),
                             mimetype="application/json",
                             status=HTTPStatus.OK)
-        response.set_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'),
-                            value=token,
-                            httponly=current_app.config.get('SESSION_COOKIE_HTTPONLY'),
-                            secure=current_app.config.get('SESSION_COOKIE_SECURE'),
-                            samesite=current_app.config.get('SESSION_COOKIE_SAMESITE'))
-        # TODO: for production
-        # response.set_cookie(key="token", value="token", httponly=True, secure=True)
+        access_token = create_access_token(identity=user_id)
+        print(access_token)
+        set_access_cookies(response, access_token)
+
         return response
 
     def delete(self):
         response = Response(mimetype="application/json",
                             status=200)
-        response.delete_cookie(key=current_app.config.get('SESSION_COOKIE_NAME'),
-                               httponly=current_app.config.get('SESSION_COOKIE_HTTPONLY'),
-                               secure=current_app.config.get('SESSION_COOKIE_SECURE'),
-                               samesite=current_app.config.get('SESSION_COOKIE_SAMESITE'))
+        unset_jwt_cookies(response)
         return response
 
+    @jwt_required()
     def get(self):
-        try:
-            session_jwt = request.cookies.get(current_app.config.get('SESSION_COOKIE_NAME'))
-            jwt.decode(session_jwt,
-                       key=current_app.config.get('SECRET_KEY'),
-                       algorithms=['HS256'])
-
-        except jwt.exceptions.ExpiredSignatureError:
-            ret = {'error_code': 1}
-            return Response(json.dumps(ret),
-                            mimetype="application/json",
-                            status=HTTPStatus.UNAUTHORIZED)
-
-        except jwt.exceptions.InvalidTokenError:
+        if (get_jwt_identity() is None):
             return Response(mimetype="application/json",
                             status=HTTPStatus.UNAUTHORIZED)
-
         return Response(mimetype="application/json",
                         status=HTTPStatus.OK)

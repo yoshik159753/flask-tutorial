@@ -5,11 +5,6 @@ export FLASK_DEBUG=True
 export TESTING=False
 export SECRET_KEY=
 
-export SESSION_COOKIE_NAME=session
-export SESSION_COOKIE_HTTPONLY=True
-export SESSION_COOKIE_SECURE=False
-export SESSION_COOKIE_SAMESITE=None
-
 export DATABASE_URL=postgres://username:password@host:port/dbname
 export TEST_DATABASE_URL=postgres://username:password@host:port/dbname
 
@@ -17,3 +12,7 @@ export CORS_ORIGINS=http://localhost:3000,http://192.168.1.1:3000
 export CORS_METHODS=GET,POST,DELETE,PATCH,PUT
 export CORS_ALLOW_HEADERS=Content-type
 export CORS_SUPPORTS_CREDENTIALS=False
+
+export JWT_TOKEN_LOCATION=headers,cookies
+export JWT_COOKIE_SECURE=True
+export JWT_COOKIE_SAMESITE=None
