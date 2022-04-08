@@ -1,5 +1,6 @@
-import os
 from http import cookies
+
+from flask import current_app
 
 
 def test_ログアウトできること(authApi, api_version):
@@ -14,8 +15,8 @@ def test_ログアウトできること(authApi, api_version):
     assert cookies_str is not None
     cookie = cookies.SimpleCookie()
     cookie.load(cookies_str)
-    session_name = os.getenv('SESSION_COOKIE_NAME')
-    assert cookie[session_name]["httponly"] == ''
+    session_name = current_app.config.get('JWT_ACCESS_COOKIE_NAME')
+    assert cookie[session_name]["httponly"] is True
     assert cookie[session_name].value == ''
 
 
@@ -28,6 +29,6 @@ def test_ログアウト中にログアウトできること(authApi, api_versio
     assert cookies_str is not None
     cookie = cookies.SimpleCookie()
     cookie.load(cookies_str)
-    session_name = os.getenv('SESSION_COOKIE_NAME')
-    assert cookie[session_name]["httponly"] == ''
+    session_name = current_app.config.get('JWT_ACCESS_COOKIE_NAME')
+    assert cookie[session_name]["httponly"] is True
     assert cookie[session_name].value == ''

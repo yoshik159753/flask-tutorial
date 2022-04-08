@@ -3,26 +3,17 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
-
-
-def set_env_value_to_app(app, key):
-    env_value = os.getenv(key)
-    if env_value is not None:
-        app.config[key] = env_value
+from flask_jwt_extended import JWTManager
 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY=os.getenv('SECRET_KEY'),
-        DATABASE_URL=os.getenv('DATABASE_URL'),
-    )
 
-    set_env_value_to_app(app, 'SESSION_COOKIE_NAME')
-    set_env_value_to_app(app, 'SESSION_COOKIE_HTTPONLY')
-    set_env_value_to_app(app, 'SESSION_COOKIE_SECURE')
-    set_env_value_to_app(app, 'SESSION_COOKIE_SAMESITE')
+    if os.getenv('SECRET_KEY') is not None:
+        app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    if os.getenv('DATABASE_URL') is not None:
+        app.config['DATABASE_URL'] = os.getenv('DATABASE_URL')
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -37,20 +28,14 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    cors_origins = os.getenv('CORS_ORIGINS')
-    cors_origins = cors_origins.split(',') if cors_origins is not None else None
-    cors_methods = os.getenv('CORS_METHODS')
-    cors_methods = cors_methods.split(',') if cors_methods is not None else None
-    cors_allow_headers = os.getenv('CORS_ALLOW_HEADERS')
-    cors_allow_headers = cors_allow_headers.split(',') if cors_allow_headers is not None else None
-    cors_supports_credentials = os.getenv('CORS_SUPPORTS_CREDENTIALS')
-    cors_supports_credentials = cors_supports_credentials if cors_supports_credentials is not None else False
-    app.config.from_mapping(
-        CORS_ORIGINS=cors_origins,
-        CORS_METHODS=cors_methods,
-        CORS_ALLOW_HEADERS=cors_allow_headers,
-        CORS_SUPPORTS_CREDENTIALS=cors_supports_credentials,
-    )
+    if os.getenv('CORS_ORIGINS') is not None:
+        app.config['CORS_ORIGINS'] = os.getenv('CORS_ORIGINS').split(',')
+    if os.getenv('CORS_METHODS') is not None:
+        app.config['CORS_METHODS'] = os.getenv('CORS_METHODS').split(',')
+    if os.getenv('CORS_ALLOW_HEADERS') is not None:
+        app.config['CORS_ALLOW_HEADERS'] = os.getenv('CORS_ALLOW_HEADERS').split(',')
+    if os.getenv('CORS_SUPPORTS_CREDENTIALS') is not None:
+        app.config['CORS_SUPPORTS_CREDENTIALS'] = os.getenv('CORS_SUPPORTS_CREDENTIALS')
     CORS(app)
 
     from . import db
@@ -71,5 +56,13 @@ def create_app(test_config=None):
     from .routes.routes import initialize_routes
     api = Api(app)
     initialize_routes(api)
+
+    if os.getenv('JWT_TOKEN_LOCATION') is not None:
+        app.config['JWT_TOKEN_LOCATION'] = os.getenv('JWT_TOKEN_LOCATION').split(',')
+    if os.getenv('JWT_COOKIE_SECURE') is not None:
+        app.config['JWT_COOKIE_SECURE'] = os.getenv('JWT_COOKIE_SECURE')
+    if os.getenv('JWT_COOKIE_SAMESITE') is not None:
+        app.config['JWT_COOKIE_SAMESITE'] = os.getenv('JWT_COOKIE_SAMESITE')
+    JWTManager(app)
 
     return app

@@ -1,8 +1,8 @@
-import os
 from http import cookies
 
 import jwt
 import pytest
+from flask import current_app
 
 
 @pytest.mark.parametrize(('username', 'password', 'error_code'), (
@@ -29,10 +29,10 @@ def test_ログインできること(authApi, api_version):
     assert cookies_str is not None
     cookie = cookies.SimpleCookie()
     cookie.load(cookies_str)
-    session_cookie_name = os.getenv('SESSION_COOKIE_NAME')
+    session_cookie_name = current_app.config.get('JWT_ACCESS_COOKIE_NAME')
     assert cookie[session_cookie_name]["httponly"] is True
     payload = jwt.decode(cookie[session_cookie_name].value,
-                         key=os.getenv('SECRET_KEY'),
+                         key=current_app.config.get('SECRET_KEY'),
                          algorithms=['HS256'])
     assert payload is not None
 
