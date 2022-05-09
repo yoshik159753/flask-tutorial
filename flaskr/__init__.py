@@ -65,4 +65,7 @@ def create_app(test_config=None):
         app.config['JWT_COOKIE_SAMESITE'] = os.getenv('JWT_COOKIE_SAMESITE')
     JWTManager(app)
 
+    app.config['PROFILE_URL'] = os.getenv('PROFILE_URL')
+    app.config['PROFILE_URL_EN'] = os.getenv('PROFILE_URL_EN')
+
     return app

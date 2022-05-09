@@ -16,3 +16,6 @@ export CORS_SUPPORTS_CREDENTIALS=False
 export JWT_TOKEN_LOCATION=headers,cookies
 export JWT_COOKIE_SECURE=True
 export JWT_COOKIE_SAMESITE=None
+
+export PROFILE_URL=https://example.com
+export PROFILE_URL_EN=https://example.com
