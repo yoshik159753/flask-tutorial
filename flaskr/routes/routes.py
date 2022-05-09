@@ -3,6 +3,7 @@ from flaskr.api.v1.endpoints.blog import Blog
 from flaskr.api.v1.endpoints.csrf_token import CsrfToken
 from flaskr.api.v1.endpoints.healthcheck import HealthCheckApi
 from flaskr.api.v1.endpoints.session import Session
+from flaskr.api.v1.endpoints.profile import Profile
 
 
 def initialize_routes(api):
@@ -13,3 +14,5 @@ def initialize_routes(api):
 
     api.add_resource(Blogs, '/api/v1/blog')
     api.add_resource(Blog, '/api/v1/blog/<blog_id>')
+
+    api.add_resource(Profile, '/api/v1/profile')
